@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * Implementation of hook_block_info().
+ */
+function blex1_block_info() {
+  $blocks ['my-block-id'] = array(
+      'info' => t('3Q Vejret')
+  );
+  return $blocks;
+}
+
+function blex1_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#blex" :
+      return '<p>' . t("Displays vejr") . '</p>';
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_block_view().
+ */
+function blex1_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'my-block-id' :
+      $block ['subject'] = 'Vejret i 3Q ';
+      $block ['content'] = blex1_contents();
+      break;
+  }
+  return $block;
+}
+
+/**
+ * custom html block
+ *
+ * @return string
+ */
+function blex1_contents() {
+  define("URL", 'http://www.weatherlink.com/user/3q/index.php?view=summary&headers=1');
+  define("Davis", 'http://www.weatherlink.com/user/3q/index.php?view=summary&headers=1');
+  define("Merelink", "<a href=" . Davis . " target=\"_blank\">Mere vejr?</a>");
+  define("EXTRA2", "93");
+
+//	$html = file_get_html ( URL );
+//	$element = $html->find ( "td.summary_data" );
+  $temp = "temp";
+  $fugt = "fugt";
+  $baro = "baro";
+  $vind = "vins";
+//
+  if (strcasecmp($vind, "Calm") == 0) {
+    $vind = "Rolig";
+  }
+
+
+
+  $pool = " ---";
+
+
+ 
+//	$element = $html->find ( "td.summary_timestamp" );
+	$dato = "idag";
+  $vejrdata = "idadg... eller?";
+//	$re = "/ ([0-9]+):([0-9]+)/";
+//	preg_match ( $re, $dato, $matches );
+  // ini_set ( "date.timezone", "Europe/Copenhagen" );
+  //$dato = $matches [0];
+  return $vejrdata . "<br>Opdateret $dato<br>" . Merelink;
+}
