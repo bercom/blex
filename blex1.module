@@ -32,40 +32,21 @@ function blex1_block_view($delta = '') {
   return $block;
 }
 
-/**
- * custom html block
- *
- * @return string
- */
+
 function blex1_contents() {
-  define("URL", 'http://www.weatherlink.com/user/3q/index.php?view=summary&headers=1');
-  define("Davis", 'http://www.weatherlink.com/user/3q/index.php?view=summary&headers=1');
-  define("Merelink", "<a href=" . Davis . " target=\"_blank\">Mere vejr?</a>");
-  define("EXTRA2", "93");
+$json_string = 'https://api.weatherlink.com/v1/NoaaExt.json?user=001D0A00066D&pass=1333qe&apiToken=D6AC2FFEF2384221A7134C7AFCE5926E';
+$jsondata = file_get_contents($json_string);
+$obj = json_decode($jsondata, true);
+$ptemp = ($obj['davis_current_observation']['temp_extra_1']);
+$pool =  "Pool (C): " .  number_format((($ptemp -32)/ 1.8), 1) . "<br>";
+$temp = "Temp (C): " . ($obj['temp_c']) . "<br>";
+$fugt =  "Fugt (%RH): " . ($obj['relative_humidity']) . "<br>";
+$baro =  "Tryk (mB): " . ($obj['pressure_mb']) . "<br>";
+$vind =  "Vind (km/t): " . ($obj['wind_kt']) . "<br>";
+// echo "Retning: " . ($obj['wind_dir']) . "<br>";
+$dato = ($obj['observation_time']) . "<br>";
 
-//	$html = file_get_html ( URL );
-//	$element = $html->find ( "td.summary_data" );
-  $temp = "temp";
-  $fugt = "fugt";
-  $baro = "baro";
-  $vind = "vins";
-//
-  if (strcasecmp($vind, "Calm") == 0) {
-    $vind = "Rolig";
-  }
+  $vejrdata = $temp . $fugt . $baro . $vind . $pool;
 
-
-
-  $pool = " ---";
-
-
- 
-//	$element = $html->find ( "td.summary_timestamp" );
-	$dato = "idag";
-  $vejrdata = "idadg... eller?";
-//	$re = "/ ([0-9]+):([0-9]+)/";
-//	preg_match ( $re, $dato, $matches );
-  // ini_set ( "date.timezone", "Europe/Copenhagen" );
-  //$dato = $matches [0];
-  return $vejrdata . "<br>Opdateret $dato<br>" . Merelink;
+  return $vejrdata . "<br>$dato<br>";
 }
