@@ -46,7 +46,8 @@ function q3vejr_contents() {
   $fugt = "Fugt (%RH): " . ($obj['relative_humidity']) . "<br>";
   $baro = "Tryk (mB): " . ($obj['pressure_mb']) . "<br>";
   $vind = "Vind (km/t): " . ($obj['wind_kt']) . "<br>";
-  $regn = "Regn (mm): " . ($obj['wind_kt']) . "<br>";
+  $rtemp = $obj['davis_current_observation']['rain_day_in'];
+  $regn = "Regn (mm): " . number_format($rtemp, 1) . "<br>";
 // echo "Retning: " . ($obj['wind_dir']) . "<br>";
   $dato = ("Opdateret: " . $obj['observation_time_rfc822']) . "<br>";
 
