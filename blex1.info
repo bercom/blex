@@ -1,4 +1,0 @@
-name = blex1
-description = An example outlining how a module can define blocks.
-package = Example modules
-core = 7.x
