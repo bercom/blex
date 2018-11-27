@@ -1,0 +1,56 @@
+<?php
+
+require ('apikeys.inc');
+
+/**
+ * Implementation of hook_block_info().
+ */
+function q3vejr_block_info() {
+  $blocks ['my-block-id'] = array(
+      'info' => t('3Q Vejret')
+  );
+  return $blocks;
+}
+
+function q3vejr_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#q3vejr" :
+      return '<p>' . t("Displays vejr") . '</p>';
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_block_view().
+ */
+function q3vejr_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'my-block-id' :
+      $block ['subject'] = 'Vejret i 3Q ';
+      $block ['content'] = q3vejr_contents();
+      break;
+  }
+  return $block;
+}
+
+function q3vejr_contents() {
+  $json_string = 'https://api.weatherlink.com/v1/NoaaExt.json?user=' . username .
+          '&pass=' . password . '&apiToken=' . apitoken;
+
+  $jsondata = file_get_contents($json_string);
+  $obj = json_decode($jsondata, true);
+  $ptemp = ($obj['davis_current_observation']['temp_extra_1']);
+  $pool = "Pool (C): " . number_format((($ptemp - 32) / 1.8), 1) . "<br>";
+  $temp = "Temp (C): " . ($obj['temp_c']) . "<br>";
+  $fugt = "Fugt (%RH): " . ($obj['relative_humidity']) . "<br>";
+  $baro = "Tryk (mB): " . ($obj['pressure_mb']) . "<br>";
+  $vind = "Vind (km/t): " . ($obj['wind_kt']) . "<br>";
+  $regn = "Regn (mm): " . ($obj['wind_kt']) . "<br>";
+// echo "Retning: " . ($obj['wind_dir']) . "<br>";
+  $dato = ("Opdateret: " . $obj['observation_time_rfc822']) . "<br>";
+
+  $vejrdata = $temp . $fugt . $baro . $vind . $regn . $pool;
+
+  return $vejrdata . "<br>$dato<br>";
+}

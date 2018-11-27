@@ -1,4 +1,4 @@
-# blex
+# q3vejr
 drupal module for extracting weather data from a Davies Vantage Pro weatherstation
 
 The weatherling api has changed to version 2.0, which broke the old system.
